@@ -24,6 +24,14 @@ jobs:
     - name: Generate SBOM
       run: |
         syft docker.io/kodekloud/webapp-color:latest -o spdx-json > spdx.json
+    
+    - name: Install grype
+      run: |
+        curl -sSfL https://get.anchore.io/grype | sudo sh -s -- -b /usr/local/bin
+
+    - name: Scan Vulnerabilities
+      run: |
+        grype sbom:./spdx.json
 
     - name: Upload SBOM Artifact
       uses: actions/upload-artifact@v4
